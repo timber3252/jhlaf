@@ -1,0 +1,12 @@
+* {
+  margin: 0px;
+  padding: 0px;
+  text-decoration: none;
+  max-width: 100%;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  text-rendering: optimizeLegibility;
+}
+
