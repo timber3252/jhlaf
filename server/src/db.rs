@@ -54,3 +54,17 @@ pub fn check_username(client: &mut Client, username: &str) -> bool {
   }
   exist
 }
+
+pub fn insert_user(client: &mut Client, username: &str, password: &str, contact: &str, userid: &str) -> bool {
+  match client.execute("
+    INSERT INTO users (username, password, userid, contact, group)
+    VALUES ($1, $2, $3, $4, \"normal\")
+  ", &[&username, &password, &userid, &contact]) {
+    Ok(_) => {
+      true
+    },
+    Err(_) => {
+      false
+    }
+  }
+}
