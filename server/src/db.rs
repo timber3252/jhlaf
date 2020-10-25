@@ -68,3 +68,11 @@ pub fn insert_user(client: &mut Client, username: &str, password: &str, contact:
     }
   }
 }
+
+pub fn check_userid(client: &mut Client, userid: &str) -> bool {
+  let mut exist: bool = false;
+  for _ in client.query("SELECT * FROM users WHERE userid = $1", &[&userid]).unwrap() {
+    exist = true;
+  }
+  exist
+}

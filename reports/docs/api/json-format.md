@@ -50,10 +50,13 @@
 
 ### err 值定义
 
-| Value | Desc.                |
-|-------|----------------------|
-| 0101  | 注册失败：用户已存在 |
-| 0102  | 注册失败：未知错误   |
+| Value | Desc.                                   |
+|-------|-----------------------------------------|
+| 0101  | 注册失败：用户已存在                    |
+| 0102  | 注册失败：未知错误                      |
+| 0201  | 登录失败：用户不存在                    |
+| 0202  | 登录失败：用户名或密码错误              |
+| 0301  | 查询用户失败：userid 不合法或用户不存在 |
 
 ## 操作类型 (Send)
 
@@ -128,28 +131,32 @@
 
 ### 登录（Result）
 
-| Key         | Value    | Desc.              |
-|-------------|----------|--------------------|
-| type        | "result" | 操作类型标记       |
-| result_type | "login"  | 结果类型标记       |
-| stat        | bool     | 登录是否成功       |
-| err         | string   | 错误信息（如果有） |
-| userid      | string   | 用户的唯一识别码   |
+| Key         | Value    | Desc.                        |
+|-------------|----------|------------------------------|
+| type        | "result" | 操作类型标记                 |
+| result_type | "login"  | 结果类型标记                 |
+| stat        | bool     | 登录是否成功                 |
+| err         | string   | 错误信息（如果有）           |
+| userid      | string   | 用户的唯一识别码（如果成功） |
 
 ### 查询用户是否存在（Result）
 
-| Key         | Value        | Desc.            |
-|-------------|--------------|------------------|
-| type        | "result"     | 操作类型标记     |
-| result_type | "query_user" | 结果类型标记     |
+| Key         | Value        | Desc.              |
+|-------------|--------------|--------------------|
+| type        | "result"     | 操作类型标记       |
+| result_type | "query_user" | 结果类型标记       |
+| stat        | bool         | 查询是否成功       |
+| err         | string       | 错误信息（如果有） |
 
 ### 获取用户数据（Result）
 
-| Key         | Value        | Desc.        |
-|-------------|--------------|--------------|
-| type        | "result"     | 操作类型标记 |
-| result_type | "query_user" | 结果类型标记 |
-| data        | userdata     | 用户数据     |
+| Key         | Value        | Desc.              |
+|-------------|--------------|--------------------|
+| type        | "result"     | 操作类型标记       |
+| result_type | "query_user" | 结果类型标记       |
+| stat        | bool         | 成功状态           |
+| err         | string       | 错误信息（如果有） |
+| data        | userdata     | 用户数据           |
 
 ### 发布 LOST & FOUND（Result）
 
