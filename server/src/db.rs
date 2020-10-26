@@ -29,7 +29,8 @@ pub fn check_database(args: &str) {
   }
   if let Err(e) = client.batch_execute("
     CREATE TABLE IF NOT EXISTS items (
-      id          SERIAL PRIMARY KEY,
+      id          BIGSERIAL PRIMARY KEY,
+      item_id     BIGSERIAL,
       lof         BOOLEAN,
       userid      TEXT NOT NULL,
       type        TEXT NOT NULL,
@@ -40,11 +41,26 @@ pub fn check_database(args: &str) {
       place       TEXT NOT NULL,
       contact     TEXT NOT NULL,
       post_time   TIMESTAMP WITHOUT TIME ZONE,
-      tags        TEXT NOT NULL
+      tags        TEXT NOT NULL,
     )
   ") {
     panic!("{:?}", e);
   }
+//  if let Err(_) = client.batch_execute("
+//    DROP TABLE IF EXISTS logs
+//  ") {
+//    // do nothing
+//  }
+//  if let Err(e) = client.batch_execute("
+//    CREATE TABLE IF NOT EXISTS logs (
+//      id          UNIQUE BIGSERIAL PRIMARY KEY,
+//      operation   TEXT NOT NULL,
+//      item_id     BIGINT,
+//      timestamp   BIGINT,
+//    )
+//  ") {
+//    panic!("{:?}", e);
+//  }
 }
 
 pub fn check_username(client: &mut Client, username: &str) -> bool {
