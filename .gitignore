@@ -106,3 +106,4 @@ dist
 cert.crt
 cert.key
 package-lock.json
+.vscode/

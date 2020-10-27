@@ -26,11 +26,8 @@
 
 .nav-item {
     width: 33vw;
+    text-align: center;
     vertical-align: middle;
-    line-height: 33vw;
+    line-height: 10vh;
     height: 100%;
-}
-
-.nav-item-left {
-    margin-
 }
