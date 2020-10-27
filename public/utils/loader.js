@@ -1,3 +1,33 @@
+function page_initial(){
+    page_dict = {"homepage":null,"laf":null,"me":null,"login":null,"publish":null,"result":null};
+}
+
+function page_change(target_page_id) {
+    var current_page = document.getElementById("main_content").firstChild;
+    if(current_page!=null){
+        page_dict[current_page.id] = current_page;
+    }
+    if (current_page1=null){
+        setInterval.
+    }
+    if(page_dict.target_page_id!=null){
+        document.getElementById("main_content").replaceChild(page_dict[target_page_id],current_page);
+    }
+    else{
+        page_render(target_page_id);
+    }
+}
+
+function request_post(type){
+    var request_json={"type":type,"para1":arguments[1],"para2":arguments[2],"para3":arguments[3],"para4":arguments[4]}
+}
+
+function page_render(target_page_id){
+    fetch()
+}
+
+
+
 function add_post(json_obj,status){
     var post_block=document.createElement("div");
     var post_type=document.createElement("div");

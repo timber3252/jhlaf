@@ -112,7 +112,7 @@
 | userid    | string                                        | 用户的唯一识别码                           |
 | item_type | "lost", "found", "all"                        | 筛选物品类型                               |
 | item_tags | string                                        | 关键词描述（空格分割，比如“红色”、“方形”） |
-| sort_type | "none", "post_time_less", "post_time_greater" | 排序方式                                   |
+| sort_type | "none", "recent_post_time" | 排序方式                                   |
 | sort_cnt  | string                                        | 一个数字，表示排序后的前 sort_cnt 个       |
 
 ## 操作类型 (Recv)

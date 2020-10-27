@@ -1,17 +1,15 @@
 function intial(){
-    socket.onopen=function(){
+    ws = new WebSocket("ws://");
+    ws.onopen=function(){
         socket.send("connected.");
     }
-    socket.onmessage=function(evt){
-        homepage=evt.data;
-        var body=document.getElementById("content");
-        body.appendChild(homepage);
+    ws.onmessage=function(evt){
+        
     }
     $("#homepage").on("click",);
 }
-function page_changed(page_name) {
 
-}
+function request(type)
 
 function page_refresh(page_name){
     
