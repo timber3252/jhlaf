@@ -7,7 +7,6 @@ function page_initial() {
   // current_page_id = "login";
   // page_update("login");
 }
-page_initial();
 
 function page_update(target_page_id) {
   var content = document.querySelector('.content');
@@ -34,6 +33,7 @@ function page_update(target_page_id) {
   //     page_dict["back"] = temp_child;
   //   }
   //   current_page_id = target_page_id;
+  // console.log(current_page_id + ' -> ' + target_page_id);
   if (current_page_id != null) {
     page_dict[current_page_id] = content.innerHTML;
   }
@@ -44,6 +44,7 @@ function page_update(target_page_id) {
           if (data.length > 0) {
             content.innerHTML = data;
           } else {
+            content.innerHTML = "";
             console.log('fetch error: data is null');
           }
         })
@@ -54,6 +55,7 @@ function page_update(target_page_id) {
   current_page_id = target_page_id;
 }
 
+page_initial();
 
 function page_refresh(target_page_id) {
   switch (target_page_id) {
