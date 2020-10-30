@@ -8,6 +8,7 @@ use tungstenite::Message;
 
 mod wss;
 mod db;
+mod data;
 
 // TODO: SAVE PICTURES
 
@@ -40,12 +41,15 @@ fn handle_conn(mut ws: &mut tungstenite::WebSocket<std::net::TcpStream>) {
     if let Ok(msg_raw) = ws.read_message() {
       if let Ok(msg) = msg_raw.to_text() {
         if let Ok(parsed) = json::parse(msg) {
-          if parsed["type"].is_null() {
+          if parsed["type"].is_null() || !parsed["type"].is_string() {
             continue;
           }
           if parsed["type"] == "register" {
             let (username, password, contact) = (&parsed["username"], &parsed["password"], &parsed["contact"]);
             if username.is_null() || password.is_null() || contact.is_null() {
+              continue;
+            }
+            if !username.is_string() || !password.is_string() || !contact.is_string() {
               continue;
             }
             if username.len() < 4 || username.len() > 32 || password.len() < 6 || password.len() > 32 || contact.len() == 0 {
@@ -84,6 +88,9 @@ fn handle_conn(mut ws: &mut tungstenite::WebSocket<std::net::TcpStream>) {
           } else if parsed["type"] == "login" {
             let (username, password) = (&parsed["username"], &parsed["password"]);
             if username.is_null() || password.is_null() {
+              continue;
+            }
+            if !username.is_string() || !password.is_string() {
               continue;
             }
             if username.len() < 4 || username.len() > 32 || password.len() < 6 || password.len() > 32 {
@@ -139,7 +146,7 @@ fn handle_conn(mut ws: &mut tungstenite::WebSocket<std::net::TcpStream>) {
           } else if parsed["type"] == "query_user" {
             let userid = &parsed["userid"];
             // TRUNC IF userid IS TOO LONG
-            if userid.is_null() || !db::check_userid(&mut client, &userid.as_str().unwrap()) {
+            if userid.is_null() || !userid.is_string() || !db::check_userid(&mut client, &userid.as_str().unwrap()) {
               ws_send(&mut ws, String::from(r#"
                 {
                   "type": "result",
@@ -156,7 +163,43 @@ fn handle_conn(mut ws: &mut tungstenite::WebSocket<std::net::TcpStream>) {
                 "stat": true
               }"#));
           } else if parsed["type"] == "query_userdata" {
-
+            let userid = &parsed["userid"];
+            if userid.is_null() || !userid.is_string() || !db::check_username(&mut client, &userid.as_str().unwrap()) {
+              ws_send(&mut ws, String::from(r#"
+                {
+                  "type": "result",
+                  "result_type": "query_userdata",
+                  "stat": false,
+                  "err": "0401"
+                }"#));
+              continue;
+            }
+            match db::query_userdata(&mut client, &userid.as_str().unwrap()) {
+              Ok(v) => {
+                ws_send(&mut ws, format!("
+                  {{
+                    \"type\": \"result\",
+                    \"result_type\": \"query_userdata\",
+                    \"stat\": true,
+                    \"data\": {{
+                      \"username\": \"{}\",
+                      \"contact\": \"{}\",
+                      \"group\": \"{}\"
+                    }}
+                  }}
+                ", v.username, v.contact, v.group));
+              }
+              Err(e) => {
+                ws_send(&mut ws, format!("
+                  {{
+                    \"type\": \"result\",
+                    \"result_type\": \"query_userdata\",
+                    \"stat\": false,
+                    \"err\": \"{}\"
+                  }}
+                ", e));
+              }
+            }
           } else if parsed["type"] == "publish_lost" {
 
           } else if parsed["type"] == "publish_found" {

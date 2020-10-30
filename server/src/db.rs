@@ -1,4 +1,5 @@
 use postgres::{NoTls, Client};
+use crate::data::{UserData, ItemData};
 
 pub fn check_database(args: &str) {
   let s = String::from(args);
@@ -37,11 +38,10 @@ pub fn check_database(args: &str) {
       name        TEXT NOT NULL,
       image_url   TEXT NOT NULL,
       desc        TEXT NOT NULL,
-      pickup_time TIMESTAMP WITHOUT TIME ZONE,
+      pickup_time BIGINT,
       place       TEXT NOT NULL,
       contact     TEXT NOT NULL,
-      post_time   TIMESTAMP WITHOUT TIME ZONE,
-      tags        TEXT NOT NULL,
+      post_time   BIGINT,
     )
   ") {
     panic!("{:?}", e);
@@ -91,4 +91,33 @@ pub fn check_userid(client: &mut Client, userid: &str) -> bool {
     exist = true;
   }
   exist
+}
+
+pub fn query_userdata(client: &mut Client, userid: &str) -> Result<UserData, String> {
+  let mut cnt: i32 = 0;
+  let mut dat: UserData = UserData {
+    username: String::new(), userid: String::new(), contact: String::new(), group: String::new()
+  };
+  for row in client.query("SELECT * FROM users WHERE userid = $1", &[&userid]).unwrap() {
+    cnt += 1;
+    dat = UserData {
+      username: row.get(1),
+      userid: row.get(3),
+      contact: row.get(4),
+      group: row.get(5)
+    };
+  }
+  if cnt == 0 { Err(String::from("0401")) } else if cnt == 1 { Ok(dat) } else { Err(String::from("0402")) }
+}
+
+pub fn insert_item(client: &mut Client, userid: &str, itemdata: &ItemData) -> bool {
+  
+}
+
+pub fn delete_item(client: &mut Client, userid: &str, itemid: &i64) -> bool {
+
+}
+
+pub fn select_item(client: &mut Client, userid: &str) -> Result<ItemData, String> {
+
 }

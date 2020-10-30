@@ -31,6 +31,7 @@
 
 | Key         | Value  | Desc.                                               |
 |-------------|--------|-----------------------------------------------------|
+| itemid      | string | 物品唯一标识码                                      |
 | type        | string | 物品类型，目前包括 "cards"、"credentials"、"others" |
 | name        | string | 物品名称                                            |
 | image       | string | 图片（使用 base64），目前限制 1 张图片              |
@@ -39,14 +40,14 @@
 | place       | string | 拾取地点                                            |
 | contact     | string | 联系方式（默认填写用户 contact）                    |
 | post_time   | string | 发布时间                                            |
-| tags        | string | 关键词描述（空格分割，比如“红色”、“方形”）          |
 
 ### userdata
 
-| Key      | Value  | Desc.                                                  |
-|----------|--------|--------------------------------------------------------|
-| username | string | 用户名                                                 |
-| contact  | string | 联系方式（用于在发布 LOST & FOUND 时自动填充联系方式） |
+| Key      | Value  | Desc.                                                    |
+|----------|--------|----------------------------------------------------------|
+| username | string | 用户名                                                   |
+| contact  | string | 联系方式（用于在发布 LOST & FOUND 时自动填充联系方式）   |
+| group    | string | 用户组（比如 normal 表示普通用户，admin 表示管理员用户） |
 
 ### err 值定义
 
@@ -57,6 +58,8 @@
 | 0201  | 登录失败：用户不存在                    |
 | 0202  | 登录失败：用户名或密码错误              |
 | 0301  | 查询用户失败：userid 不合法或用户不存在 |
+| 0401  | 获取数据失败：userid 不合法或用户不存在 |
+| 0402  | 获取数据失败：未知错误                  |
 
 ## 操作类型 (Send)
 
@@ -101,22 +104,22 @@
 
 ### 删除 LOST & FOUND
 
-| Key     | Value                         | Desc.            |
-|---------|-------------------------------|------------------|
-| type    | "delete_lost", "delete_found" | 操作类型标记     |
-| userid  | string                        | 用户的唯一识别码 |
-| post_id | string                        | 物品唯一标识码   |
+| Key    | Value                         | Desc.            |
+|--------|-------------------------------|------------------|
+| type   | "delete_lost", "delete_found" | 操作类型标记     |
+| userid | string                        | 用户的唯一识别码 |
+| itemid | string                        | 物品唯一标识码   |
 
 ### 筛选 LOST & FOUND
 
-| Key       | Value                                         | Desc.                                      |
-|-----------|-----------------------------------------------|--------------------------------------------|
-| type      | "select"                                      | 操作类型标记                               |
-| userid    | string                                        | 用户的唯一识别码                           |
-| item_type | "lost", "found", "all"                        | 筛选物品类型                               |
-| item_tags | string                                        | 关键词描述（空格分割，比如“红色”、“方形”） |
-| sort_type | "none", "recent_post_time" | 排序方式                                   |
-| sort_cnt  | string                                        | 一个数字，表示排序后的前 sort_cnt 个       |
+| Key        | Value                  | Desc.                                          |
+|------------|------------------------|------------------------------------------------|
+| type       | "select"               | 操作类型标记                                   |
+| userid     | string                 | 用户的唯一识别码                               |
+| item_type  | "lost", "found", "all" | 筛选物品类型                                   |
+| ncnt       | string, "all"          | 一个数字，表示排序后的前 ncnt 个，按照时间排序 |
+| time_begin | string(number), "none" | 筛选条件：开始的时间戳                         |
+| time_end   | string(number), "none" | 筛选条件：结束的时间戳                         |
 
 ## 操作类型 (Recv)
 
