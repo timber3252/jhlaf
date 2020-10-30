@@ -32,16 +32,6 @@
     box-sizing: border-box;
 }
 
-.header {
-    text-align: center;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
-    width: 100%;
-}
-
 .content {
     height: 90vh;
     overflow-y: scroll;
@@ -58,4 +48,83 @@
     align-items: center;
     justify-content: space-between;
     flex-flow: row nowrap;
+}
+
+.me0 {
+    height: 11vh;
+    margin-top: 4rem;
+}
+
+.me1 {
+    margin-top: 2rem;
+    height: 15vh;
+    border-radius: 25px;
+    background: #eef4f7;
+    box-shadow: 20px 20px 60px #cacfd2, -20px -20px 60px #ffffff;
+}
+
+.me2 {
+    margin: 0vh 10vh 0vh;
+    height: 16vh;
+    font-size: 33px;
+    line-height: 6.5rem;
+    font-weight: bold;
+    float: left;
+    line-height: 14vh;
+}
+
+.header {
+    /*样式有待商榷*/
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-around;
+    color: #000000;
+    font-size: 40px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    text-align: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    width: 100%;
+    margin-top: 1.7rem;
+}
+
+#发布按钮 {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 2rem;
+}
+
+.publish1 {
+    border-radius: 5px;
+    background: #ffffff;
+    box-shadow: 7px 7px 10px #eef0f1, -7px -7px 10px #ffffff;
+}
+
+.inline {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-around;
+}
+
+.text {
+    border: 1px solid rgba(0, 0, 0, .15);
+    margin-top: 3rem;
+    margin-left: 10rem;
+    height: 5vh;
+    width: 65vw;
+    font-size: 32px;
+}
+
+.vertical {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
 }
