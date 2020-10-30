@@ -59,3 +59,9 @@
     justify-content: space-between;
     flex-flow: row nowrap;
 }
+
+.me {
+    margin: 0vh 5vh 0vh;
+    height: 10vh;
+    text-align: center;
+}
