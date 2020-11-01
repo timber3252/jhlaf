@@ -1,3 +1,255 @@
+
+<style>
+{
+    margin: 0px;
+    padding: 0px;
+    text-decoration: none;
+    max-width: 100%;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    text-rendering: optimizeLegibility;
+}
+
+.nav-item {
+    width: 33vw;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 10vh;
+    height: 100%;
+}
+
+.view {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 1;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+    margin: 0 auto;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.content {
+    height: 90vh;
+    overflow-y: scroll;
+    position: absolute;
+    width: 100vw;
+}
+.header {
+    /*样式有待商榷*/
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-around;
+    color:rgba(0, 0, 0, 0.863);
+    font-size: 5rem;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    text-align: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    width: 100%;
+    margin-top: 2rem;}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    height: 10vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-flow: row nowrap;
+}
+
+.lf0{      /*搜索*/
+    display:flex;
+    flex-flow: row nowrap;
+    justify-content: flex-end;
+    font-size:5rem;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    text-align: center;
+    position: absolute;
+    top: 3.8rem;
+    left: 4rem;
+}
+
+.lf1 {     /*发布失物*/
+    display:flex;
+    flex-flow: row nowrap;
+    justify-content: flex-end;
+    font-size: 6rem;
+    color:dimgrey;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    text-align: center;
+    position: absolute;
+    top: 15rem;
+    left: 3rem;
+    z-index: 1000;
+    width: 40%;
+    margin-left:0rem;
+    margin-top: 1.7rem;
+    flex-flow:10rem;
+    margin-top: 4rem;
+    margin-top: 2rem;
+    height: 12rem;
+    border-radius: 25px;
+    background: #eef4f7;
+    box-shadow: 20px 20px 60px #cacfd2, -20px -20px 60px #ffffff;
+}
+
+.lf2 {    /*发布招领*/
+    display:flex;
+    flex-flow: row nowrap;
+    justify-content: flex-end;
+    color:dimgrey;
+    font-size: 6rem;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    text-align: center;
+    position: absolute;
+    top: 15rem;
+    left: 34rem;
+    z-index: 1000;
+    width: 40%;
+    margin-top: 1.7rem;
+    flex-flow:10rem;
+    margin-top: 4rem;
+    margin-top: 2rem;
+    height: 12rem;
+    border-radius: 25px;
+    background: #eef4f7;
+    box-shadow: 20px 20px 60px #cacfd2, -20px -20px 60px #ffffff;
+}
+
+.lf3 {    /*我的失物*/
+    display:flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    font-size: 1.65rem;
+    color:dimgrey;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    text-align: left;
+    position: absolute;
+    top: 34rem;
+    left: 3rem;
+    z-index: 1000;
+    width: 55rem;
+    margin-top: 2 rem;
+    flex-flow:10rem;
+    height: 20rem;
+    border-radius: 25px;
+    background: #eef4f7;
+    box-shadow: 20px 20px 60px #cacfd2, -20px -20px 60px #ffffff;
+}
+
+.lf4 {    /*我的招领*/
+    display:flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    font-size: 1.65rem;
+    color:dimgrey;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    text-align: left;
+    position: absolute;
+    top: 57rem;
+    left: 3rem;
+    z-index: 1000;
+    width: 55rem;
+    flex-flow:10rem;
+    margin-top: 2rem;
+    height: 20rem;
+    border-radius: 25px;
+    background: #eef4f7;
+    box-shadow: 20px 20px 60px #cacfd2, -20px -20px 60px #ffffff;
+}
+
+
+
+.me0 {
+    height: 11vh;
+    margin-top: 4rem;
+}
+
+.me1 {
+    margin-top: 2rem;
+    height: 15vh;
+    border-radius: 25px;
+    background: #eef4f7;
+    box-shadow: 20px 20px 60px #cacfd2, -20px -20px 60px #ffffff;
+}
+
+.me2 {
+    margin: 0vh 10vh 0vh;
+    height: 16vh;
+    font-size: 33px;
+    line-height: 6.5rem;
+    font-weight: bold;
+    float: left;
+    line-height: 14vh;
+}
+
+#发布按钮 {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 2rem;
+}
+
+.publish1 {
+    border-radius: 5px;
+    background: #ffffff;
+    box-shadow: 7px 7px 10px #eef0f1, -7px -7px 10px #ffffff;
+}
+
+.inline {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-around;
+}
+
+.text {
+    border: 1px solid rgba(0, 0, 0, .15);
+    margin-top: 3rem;
+    margin-left: 10rem;
+    height: 5vh;
+    width: 65vw;
+    font-size: 32px;
+}
+
+.vertical {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+}
+
+.laf1 {
+    font-size: 3rem;
+    margin-top: 1rem;
+    height: 10vh;
+    border-radius: 5px;
+    background: #f2f2f2;
+    box-shadow: 6px 6px 12px #ededed, -6px -6px 12px #f7f7f7;
+}
+
+
+.detail {
+    border-radius: 6px;
+    background: #fcfcfc;
+    box-shadow: 5px 5px 13px #f7f7f7, -5px -5px 13px #ffffff;
+}
+</style>
+
+
 <div>   
     <div style="margin:0";></div>
     <div class="header">
