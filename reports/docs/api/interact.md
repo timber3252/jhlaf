@@ -86,16 +86,6 @@
 * place2
 * contact2
 
-<!-- ## 发布
-
-* publish_type
-* item_type
-* item_name
-* item_image
-* item_desc
-* time
-* place
-* contact -->
 
 ## login.html
 
