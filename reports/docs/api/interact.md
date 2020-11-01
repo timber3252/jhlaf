@@ -64,7 +64,7 @@
 * ${user_contact}
 
 
-# 元素 id
+# 元素 id 及从属关系
 
 ## 失物发布
 
@@ -86,15 +86,57 @@
 * place2
 * contact2
 
-## 注册
+<!-- ## 发布
+
+* publish_type
+* item_type
+* item_name
+* item_image
+* item_desc
+* time
+* place
+* contact -->
+
+## login.html
+
+* login_box
+* register_box
+
+## laf.html
+
+* lost_tab
+* found_tab
+
+## register_box
 
 * username2
 * password2
 * contact3
 
-## 登录
+## login_box
 
 * username1
 * password1
+
+## 搜索失物
+
+* search1
+
+## 搜索招领
+
+* search2
+
+## select_box
+
+* item_type3 (option全部的value为all，且设置为selected)
+* time_begin1
+* time_end1
+
+## 底部按钮
+
+* nav_homepage
+* nav_laf
+* nav_me
+
 
 
