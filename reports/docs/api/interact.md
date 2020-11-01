@@ -59,3 +59,6 @@
 * ${publish_time}
 
 ## me
+* ${image}
+* ${user_name}
+* ${user_contact}

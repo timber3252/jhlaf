@@ -1,0 +1,53 @@
+<div class="header">
+    <div onclick="alert('返回')" style="margin-top:2.3rem">
+        <svg width="30" height="30" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg"><path d=" M 165 565C 165 565 465 265 465 265C 484 245 516 245 535 265C 535 265 835 565 835 565C 855 584 856 616 836 636C 816 656 784 655 765 635C 765 635 500 371 500 371C 500 371 235 635 235 635C 221 650 200 655 181 647C 162 639 150 621 150 601C 150 587 155 574 165 565C 165 565 165 565 165 565" transform="rotate(270,500,500)"/></svg>
+    </div>
+    <div style="margin-top:1.5rem">
+        失物/招领信息
+    </div>
+    <div onclick="alert('信息')" style="margin-top:2.3rem">
+        <svg width="24" height="24" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg"><path d="M 500 0C 224 0 0 224 0 500C 0 776 224 1000 500 1000C 776 1000 1000 776 1000 500C 1000 224 776 0 500 0C 500 0 500 0 500 0M 500 50C 749 50 950 251 950 500C 950 749 749 950 500 950C 251 950 50 749 50 500C 50 251 251 50 500 50C 500 50 500 50 500 50 M 501 191C 626 191 690 275 690 375C 690 475 639 483 595 513C 573 525 558 553 559 575C 559 591 554 602 541 601C 541 601 460 601 460 601C 446 601 436 581 436 570C 436 503 441 488 476 454C 512 421 566 408 567 373C 566 344 549 308 495 306C 463 303 445 314 411 361C 400 373 384 382 372 373C 372 373 318 333 318 333C 309 323 303 307 312 293C 362 218 401 191 501 191C 501 191 501 191 501 191M 500 625C 541 625 575 659 575 700C 576 742 540 776 500 775C 457 775 426 739 425 700C 425 659 459 625 500 625C 500 625 500 625 500 625"/></svg>
+    </div>
+</div>
+
+<div class="vertical" style="font-size: 2.5rem;">
+    <div>
+        <div class="detail" style="height:20vh;margin-top:8vh">
+            <div class="inline">
+                <div style="margin-top: 2.5rem;margin-left:  2.5em;">
+                    ${image}
+                </div>
+                <div class="vertical" style="margin-top: 2.5rem;">
+                    <div>
+                        物品名称${item_name}
+                    </div>
+                    <div>
+                        物品类型${item_type}
+                    </div>
+                    <div>
+                        发布时间${publish_time}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="detail" style="height:30vh;margin-top:2vh">
+            <div class="vertical" style="margin-left: 7rem;">
+                <div style="margin-top: 4rem;">
+                    拾取时间${time} <br><br>拾取地点${place}
+                </div>
+                <br>
+                <div>
+                    详细描述${description}
+                </div>
+                <br><br>
+                <div class="inline">
+                    <div>联系人${user_name}</div>
+                    <div>联系方式${user_contact}</div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
