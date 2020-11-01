@@ -66,6 +66,7 @@
     justify-content: space-between;
     flex-flow: row nowrap;
 }
+
 .lf0{      /*搜索*/
     display:flex;
     flex-flow: row nowrap;
@@ -77,6 +78,7 @@
     top: 2rem;
     left: 3rem;
 }
+
 .lf1 {     /*发布失物*/
     display:flex;
     flex-flow: row nowrap;
