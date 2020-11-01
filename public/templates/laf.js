@@ -6,4 +6,12 @@ var example_template = '' +
 
 
 var user_info = '' +
-    '<div class="userid">${user_name}</div>'
+    '<div class="laf1 inline">' +
+    ' <div>${image}</div>' +
+    '<div class="vertical">' +
+    '<div>${item_name}e</div>' +
+    '<div>${item_type}</div>' +
+    '<div>${publish_time}</div>' +
+    '</div>' +
+    '<div>${description}</div>' +
+    '</div>';

@@ -12,11 +12,15 @@
     </div>
     <div class="vertical">
         <div class="publish1" style="margin-top:12rem;height:35rem">
-            <div clas="inline">
-                <span style="margin-left: 10rem;font-size:45px">
+            <div class="inline">
+                <span style="margin-left: 3rem;font-size:45px">
                     分类
                 </span>
-                <select style="height: 3rem;width:10rem;font-size:36px;margin-left:20rem">
+                <select id="publish_type" style="height: 3rem;width:10rem;font-size:36px">
+                    <option value ="lost">失物</option>
+                    <option value ="found">招领</option>
+                </select>
+                <select id="item_type" style="height: 3rem;width:10rem;font-size:36px ">
                     <option value ="credentials">证件</option>
                     <option value ="keys">钥匙</option>
                     <option value="student-card">学生卡</option>
@@ -24,20 +28,21 @@
                 </select>
             </div>
             <div>
-                <input type="text" class="text" placeholder="标题">
-                <input type="text" class="text" style="height:15vh" placeholder="描述一下这个物品吧">
+                <input id="item_name" type="text" class="text" placeholder="标题 ">
+                <input id="item_desc" type="text" class="text" style="height:15vh " placeholder="描述一下这个物品吧 ">
 
             </div>
         </div>
 
-        <div class="publish1">
-            <div style="margin-top:1rem;height:35rem">
-                <input type="text" class="text" style="width:65vw" placeholder="在哪里丢的或是捡到的呢">
-                <input type="text" class="text" placeholder="啥子时间嘛">
-                <input type="file" name="file" style="margin-left:10rem;margin-top:7rem;font-size:30px">
+        <div class="publish1 ">
+            <div style="margin-top:1rem;height:40rem ">
+                <input id="place" type="text " class="text " style="width:65vw " placeholder="在哪里丢的或是捡到的呢 ">
+                <input id="time" type="text " class="text " placeholder="啥子时间嘛 ">
+                <input id="item_image" type="file " name="file " style="margin-left:10rem;margin-top:7rem;font-size:30px ">
+                <input id="contact" type="text " class="text " placeholder="留下您的联系方式吧 ">
             </div>
         </div>
 
-        <input type="text" style="margin-top:7rem;margin-left:10rem;font-size:36px" value="一些提交的规范及注意事项">
+        <input type="text " style="margin-top:7rem;margin-left:10rem;font-size:36px " value="一些提交的规范及注意事项 ">
     </div>
 </div>
