@@ -1,36 +1,28 @@
 <div class="global">
   <div class="header-fullpage">
     <div class="header-row lineflex-v">
-      <div class="titlebox fwhite middle">
-        个人中心
+      <div class="return-button middle fwhite titlebox lineflex-v" onclick="pop_page_stack()">
+        <svg fill="#FFFFFF" width="32" height="32" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg"><path d=" M 526 223C 526 223 526 223 526 223C 526 223 526 223 527 223C 527 223 727 423 727 423C 742 438 742 462 727 477C 712 492 688 492 673 477C 673 477 538 341 538 341C 538 341 538 750 538 750C 538 771 522 788 501 788C 480 789 463 771 463 750C 463 750 463 340 463 340C 463 340 327 477 327 477C 312 492 288 492 273 477C 258 462 258 438 273 423C 273 423 469 228 469 228C 476 218 488 212 500 212C 509 212 519 216 526 223C 526 223 526 223 526 223" transform="rotate(270,500,500)"/></svg>
       </div>
-      <div class="search-button middle fwhite titlebox">
+      <div class="titlebox fwhite middle">
+        用户信息
+      </div>
+      <div class="middle fwhite titlebox empty-box-32">
         <!-- placeholder: to be filled -->
       </div>
     </div>
   </div>
   <div class="main-content-fullpage-small">
-    <div class="panel userinfo-panel lineflex-v" onclick="push_page_stack('user')">
-      <img class="avatarbox titlebox lineflex" id="userinfo-usericon">
-      <div class="usernamebox small titlebox" id="userinfo-username"></div>
-    </div>
     <div class="panel">
       <div class="lineflex-v panel-item-first">
-        <div class="fblack small spec-middle-panel-item titlebox">我的全部失物</div>
+        <div class="fblack small spec-middle-panel-item titlebox" onclick="">修改密码</div>
         <div class="right-arrow lineflex titlebox"><svg width="24" height="24" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg"><path d=" M 165 565C 165 565 465 265 465 265C 484 245 516 245 535 265C 535 265 835 565 835 565C 855 584 856 616 836 636C 816 656 784 655 765 635C 765 635 500 371 500 371C 500 371 235 635 235 635C 221 650 200 655 181 647C 162 639 150 621 150 601C 150 587 155 574 165 565C 165 565 165 565 165 565" transform="rotate(90,500,500)"/></svg></div>
       </div>
       <div class="lineflex-v panel-item">
-        <div class="fblack small spec-middle-panel-item titlebox">我的全部招领</div>
+        <div class="fblack small spec-middle-panel-item titlebox" onclick="">修改个人信息</div>
         <div class="right-arrow lineflex titlebox"><svg width="24" height="24" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg"><path d=" M 165 565C 165 565 465 265 465 265C 484 245 516 245 535 265C 535 265 835 565 835 565C 855 584 856 616 836 636C 816 656 784 655 765 635C 765 635 500 371 500 371C 500 371 235 635 235 635C 221 650 200 655 181 647C 162 639 150 621 150 601C 150 587 155 574 165 565C 165 565 165 565 165 565" transform="rotate(90,500,500)"/></svg></div>
       </div>
     </div>
-    <div class="panel">
-      <div class="lineflex-v">
-        <div class="lineflex-v panel-item-first">
-          <div class="fblack small spec-middle-panel-item titlebox" onclick="location.assign('https://github.com/timber3252/jhlaf')">关于</div>
-          <div class="right-arrow lineflex titlebox"><svg width="24" height="24" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg"><path d=" M 165 565C 165 565 465 265 465 265C 484 245 516 245 535 265C 535 265 835 565 835 565C 855 584 856 616 836 636C 816 656 784 655 765 635C 765 635 500 371 500 371C 500 371 235 635 235 635C 221 650 200 655 181 647C 162 639 150 621 150 601C 150 587 155 574 165 565C 165 565 165 565 165 565" transform="rotate(90,500,500)"/></svg></div>
-        </div>
-      </div>
-    </div>
+    <input type="button" class="wide-button" id="login" value="登出" onclick="setCookie('JHLAF_USERID', '', -1); checkStatus();">
   </div>
 </div>

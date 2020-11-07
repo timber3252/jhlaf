@@ -9,15 +9,9 @@ use tungstenite::Message;
 mod wss;
 mod db;
 mod data;
+mod key;
 
 // TODO: SAVE PICTURES
-
-const DATABASE_ARG: &str = "host=localhost user=postgres";
-
-fn result_json() -> String {
-  let mut res: String = String::new();
-  res
-}
 
 fn ws_send(ws: &mut tungstenite::WebSocket<std::net::TcpStream>, data: String) {
   if let Err(e) = ws.write_message(Message::Text(data)) {
@@ -26,7 +20,7 @@ fn ws_send(ws: &mut tungstenite::WebSocket<std::net::TcpStream>, data: String) {
 }
 
 fn handle_conn(mut ws: &mut tungstenite::WebSocket<std::net::TcpStream>) {
-  let mut client = match Client::connect(DATABASE_ARG, NoTls) {
+  let mut client = match Client::connect(&(String::from("host=localhost user=postgres dbname=jhlaf password=") + key::PASSWORD), NoTls) {
     Ok(c) => c,
     Err(x) => {
       println!("{:?}", x);
@@ -44,6 +38,7 @@ fn handle_conn(mut ws: &mut tungstenite::WebSocket<std::net::TcpStream>) {
           if parsed["type"].is_null() || !parsed["type"].is_string() {
             continue;
           }
+          println!("{}", parsed);
           if parsed["type"] == "register" {
             let (username, password, contact) = (&parsed["username"], &parsed["password"], &parsed["contact"]);
             if username.is_null() || password.is_null() || contact.is_null() {
@@ -52,7 +47,7 @@ fn handle_conn(mut ws: &mut tungstenite::WebSocket<std::net::TcpStream>) {
             if !username.is_string() || !password.is_string() || !contact.is_string() {
               continue;
             }
-            if username.len() < 4 || username.len() > 32 || password.len() < 6 || password.len() > 32 || contact.len() == 0 {
+            if username.as_str().unwrap().len() < 4 || username.as_str().unwrap().len() > 32 {
               continue;
             }
             let ss = username.as_str().unwrap();
@@ -67,6 +62,7 @@ fn handle_conn(mut ws: &mut tungstenite::WebSocket<std::net::TcpStream>) {
                   "stat": false,
                   "err": "0101"
                 }"#));
+              continue;
             }
             let userid = calc_userid(&username.as_str().unwrap(), &password.as_str().unwrap());
             if db::insert_user(&mut client, &username.as_str().unwrap(), &password.as_str().unwrap(), &contact.as_str().unwrap(), &userid) {
@@ -93,7 +89,7 @@ fn handle_conn(mut ws: &mut tungstenite::WebSocket<std::net::TcpStream>) {
             if !username.is_string() || !password.is_string() {
               continue;
             }
-            if username.len() < 4 || username.len() > 32 || password.len() < 6 || password.len() > 32 {
+            if username.as_str().unwrap().len() < 4 || username.as_str().unwrap().len() > 32 {
               continue;
             }
             let ss = username.as_str().unwrap();
@@ -108,6 +104,7 @@ fn handle_conn(mut ws: &mut tungstenite::WebSocket<std::net::TcpStream>) {
                   "stat": false,
                   "err": "0201"
                 }"#));
+              continue;
             }
             let mut done: bool = false;
             for row in client.query("SELECT * FROM users WHERE username = $1", &[&username.as_str().unwrap()]).unwrap() {
@@ -119,7 +116,7 @@ fn handle_conn(mut ws: &mut tungstenite::WebSocket<std::net::TcpStream>) {
                     \"type\": \"result\",
                     \"result_type\": \"login\",
                     \"stat\": true,
-                    \"userid\": {}
+                    \"userid\": \"{}\"
                   }}", userid));
               } else {
                 ws_send(&mut ws, String::from(r#"
@@ -132,6 +129,7 @@ fn handle_conn(mut ws: &mut tungstenite::WebSocket<std::net::TcpStream>) {
                 }"#));
               }
               done = true;
+              break;
             }
             if !done {
               ws_send(&mut ws, String::from(r#"
@@ -164,7 +162,7 @@ fn handle_conn(mut ws: &mut tungstenite::WebSocket<std::net::TcpStream>) {
               }"#));
           } else if parsed["type"] == "query_userdata" {
             let userid = &parsed["userid"];
-            if userid.is_null() || !userid.is_string() || !db::check_username(&mut client, &userid.as_str().unwrap()) {
+            if userid.is_null() || !userid.is_string() || !db::check_userid(&mut client, &userid.as_str().unwrap()) {
               ws_send(&mut ws, String::from(r#"
                 {
                   "type": "result",
@@ -200,16 +198,92 @@ fn handle_conn(mut ws: &mut tungstenite::WebSocket<std::net::TcpStream>) {
                 ", e));
               }
             }
-          } else if parsed["type"] == "publish_lost" {
+          } else if parsed["type"] == "publish" {
+            let userid = &parsed["userid"];
+            if userid.is_null() || !userid.is_string() || !db::check_userid(&mut client, &userid.as_str().unwrap()) {
+              ws_send(&mut ws, String::from(r#"
+                {
+                  "type": "result",
+                  "result_type": "publish",
+                  "stat": false,
+                  "err": "0501"
+                }"#));
+              continue;
+            }
+            let itemdata = &parsed["item"];
+            if itemdata.is_null() || !itemdata.is_object() {
+              continue;
+            }
+            // todo check valid
+            match db::insert_item(&mut client, &userid.as_str().unwrap(), 
+              &data::ItemData {
+                item_id: -1,
+                islost: parsed["item"]["lof"].as_bool().unwrap(),
+                userid: String::from(userid.as_str().unwrap()),
+                item_type: String::from(parsed["item"]["type"].as_str().unwrap()),
+                item_name: String::from(parsed["item"]["name"].as_str().unwrap()),
+                image_url: String::from(parsed["item"]["image"].as_str().unwrap()),
+                desc: String::from(parsed["item"]["desc"].as_str().unwrap()),
+                pickup_time: parsed["item"]["pickup_time"].as_i64().unwrap(),
+                place: String::from(parsed["item"]["place"].as_str().unwrap()),
+                contact: String::from(parsed["item"]["contact"].as_str().unwrap()),
+                post_time: parsed["item"]["post_time"].as_i64().unwrap(),
+              }) {
+                true => {
+                  ws_send(&mut ws, String::from(r#"
+                  {
+                    "type": "result",
+                    "result_type": "publish",
+                    "stat": true,
+                  }"#));
+                },
+                false => {
+                  ws_send(&mut ws, String::from(r#"
+                  {
+                    "type": "result",
+                    "result_type": "publish",
+                    "stat": false,
+                    "err": "0502"
+                  }"#));
+                }
+              }
+          } else if parsed["type"] == "delete" {
+            let userid = &parsed["userid"];
+            if userid.is_null() || !userid.is_string() || !db::check_userid(&mut client, &userid.as_str().unwrap()) {
+              ws_send(&mut ws, String::from(r#"
+                {
+                  "type": "result",
+                  "result_type": "delete",
+                  "stat": false,
+                  "err": "0601"
+                }"#));
+              continue;
+            }
+            match db::delete_item(&mut client, &userid.as_str().unwrap(), parsed["itemid"].as_i64().unwrap()) {
+              true => {
+                ws_send(&mut ws, String::from(r#"
+                  {
+                    "type": "result",
+                    "result_type": "delete",
+                    "stat": true,
+                  }"#));
+              },
+              false => {
+                ws_send(&mut ws, String::from(r#"
+                  {
+                    "type": "result",
+                    "result_type": "delete",
+                    "stat": true,
+                    "err": "0602"
+                  }"#));
+              }
+            }
+          } else if parsed["type"] == "select_all" {
 
-          } else if parsed["type"] == "publish_found" {
-
-          } else if parsed["type"] == "delete_lost" {
-
-          } else if parsed["type"] == "delete_found" {
-
-          } else if parsed["type"] == "select" {
-
+          } else if parsed["type"] == "select_me" {
+            
+          } else if parsed["type"] == "close_session" {
+            break;
           }
         }
       }
@@ -228,6 +302,6 @@ fn calc_userid(usr: &str, pwd: &str) -> String {
 }
 
 fn main() {
-  db::check_database(DATABASE_ARG);
+  db::check_database(&(String::from("host=localhost user=postgres password=") + key::PASSWORD));
   wss::ws_server("0.0.0.0:3001", handle_conn);
 }
