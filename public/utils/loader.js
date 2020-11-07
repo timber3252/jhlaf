@@ -46,10 +46,13 @@ function page_update(target_page_id) {
       .then(function (response) {
         response.text().then(function (data) {
           if (data.length > 0) {
-            content.innerHTML = data;
+            if (current_page_id == target_page_id) {
+              content.innerHTML = data;
+            }
+            render_page();
           } else {
             content.innerHTML = "";
-            console.log('fetch error: data is null');
+            console.error('fetch error: data is null');
           }
         })
       })
@@ -70,7 +73,6 @@ function page_update(target_page_id) {
     document.getElementById("nav-item-me-svg").setAttribute("fill", "#0078D7");
   }
   current_page_id = target_page_id;
-  render_page();
 }
 
 function page_refresh(target_page_id) {
@@ -83,14 +85,15 @@ function page_refresh(target_page_id) {
     .then(function (response) {
       response.text().then(function (data) {
         if (data.length > 0) {
-          content.innerHTML = data;
+          if (current_page_id == target_page_id)
+            content.innerHTML = data;
+          render_page();
         } else {
           content.innerHTML = "";
           console.log('refresh error: data is null');
         }
       })
     })
-  render_page();
 }
 
 function page_cover(target_page_path) {
@@ -137,5 +140,3 @@ function pop_page_stack() {
     page_cover(cur);
   }
 }
-
-page_initial();

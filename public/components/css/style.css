@@ -345,6 +345,7 @@ a {
 
 .item-card .title {
   font-size: 18px;
+  width: calc(100vw - 64px - 200px);
   color: #000000;
 }
 

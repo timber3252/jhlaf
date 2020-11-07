@@ -110,9 +110,9 @@ pub fn query_userdata(client: &mut Client, userid: &str) -> Result<UserData, Str
 
 pub fn insert_item(client: &mut Client, userid: &str, d: &ItemData) -> bool {
   match client.execute("
-    INSERT INTO items (lof, userid, type, name, image_url, pickup_time, place, contact, post_time)
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-  ", &[&d.islost, &userid, &d.item_type, &d.item_name, &d.image_url, &d.pickup_time, &d.place, &d.contact, &d.post_time]) {
+    INSERT INTO items (lof, userid, type, name, image_url, _desc, pickup_time, place, contact, post_time)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+  ", &[&d.islost, &userid, &d.item_type, &d.item_name, &d.image_url, &d.desc, &d.pickup_time, &d.place, &d.contact, &d.post_time]) {
     Ok(_) => {
       true
     },
@@ -126,7 +126,7 @@ pub fn insert_item(client: &mut Client, userid: &str, d: &ItemData) -> bool {
 pub fn delete_item(client: &mut Client, userid: &str, itemid: i64) -> bool {
   // TODO: admin support
   match client.execute("
-    DELETE FROM items WHERE itemid = $1, userid = $2
+    DELETE FROM items WHERE itemid = $1 and userid = $2
   ", &[&itemid, &userid]) {
     Ok(_) => {
       true
@@ -138,6 +138,3 @@ pub fn delete_item(client: &mut Client, userid: &str, itemid: i64) -> bool {
   }
 }
 
-// pub fn select_item(client: &mut Client, userid: &str) -> Result<ItemData, String> {
-
-// }

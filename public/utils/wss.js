@@ -135,7 +135,6 @@ function register() {
 }
 
 function checkStatus() {
-  global_userid = getCookie('JHLAF_USERID');
   if (global_userid != "") {
     let ws = new WebSocket(ws_server_addr);
     ws.onopen = function (e) {
@@ -155,7 +154,7 @@ function checkStatus() {
           type: "close_session"
         }));
         if (d.stat == true) {
-          render_page();
+          // render_page();
         } else {
           push_page_stack('login');
         }
@@ -180,24 +179,51 @@ function publish_post() {
   item_image = document.getElementById('item_image').value;
   item_contact = document.getElementById('item_contact').value;
   item_desc = document.getElementById('item_desc').value;
-  // console.log(islost, item_type, item_name, item_place, item_pickup_time, 
-  //   item_contact, item_desc);
-  // console.log(item_image);
+  console.log(islost, item_type, item_name, item_place, item_pickup_time, 
+    item_contact, item_desc);
+  console.log(item_image);
+  // TODO: valid check
   let ws = new WebSocket(ws_server_addr);
-  ws.send(JSON.stringify({
-    type: "publish",
-    lof: islost,
-    userid: global_userid,
-    item: {
-      itemid: "-1",
-      type: item_type,
-      name: item_name,
-      image: "", // TODO
-      desc: item_desc,
-      pickup_time: (new Date(item_pickup_time)).getTime().toString(),
-      place: item_place,
-      contact: item_contact,
-      post_time: (new Date()).getTime().toString()
+  ws.onclose = function (e) {
+    console.log('publish_post: disconnected');
+  }
+  ws.onopen = function (e) {
+    console.log('publish_post: connected to ws server');
+    ws.send(JSON.stringify({
+      type: "publish",
+      lof: islost,
+      userid: global_userid,
+      item: {
+        itemid: "-1",
+        type: item_type,
+        name: item_name,
+        image: "", // TODO
+        desc: item_desc,
+        pickup_time: (new Date(item_pickup_time)).getTime().toString(),
+        place: item_place,
+        contact: item_contact,
+        post_time: (new Date()).getTime().toString()
+      }
+    })); 
+  }
+  ws.onerror = function (e) {
+    console.error('publish_post fatal error:', e);
+  }
+  ws.onmessage = function (e) {
+    console.log(e.data);
+    let d = JSON.parse(e.data);
+    if (d.type == "result" && d.result_type == "publish") {
+      ws.send(JSON.stringify({
+        type: "close_session"
+      }));
+      if (d.stat == true) {
+        pop_page_stack();
+      } else {
+        console.log("错误代码：" + d.err);
+      }
+      ws.close();
     }
-  }));
+  }
 }
+
+

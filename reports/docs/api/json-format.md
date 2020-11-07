@@ -188,7 +188,7 @@
 | stat        | bool                          | 删除是否成功       |
 | err         | string                        | 错误信息（如果有） |
 
-### 筛选 LOST & FOUND（Result）
+### 筛选 LOST & FOUND（Result）（OK）
 
 | Key         | Value    | Desc.                                   |
 |-------------|----------|-----------------------------------------|
@@ -197,5 +197,5 @@
 | stat        | bool     | 筛选是否成功                            |
 | err         | string   | 错误信息（如果有）                      |
 | posts_len   | string   | 返回的条数                              |
-| posts_id    | array    | 相关 LOST & FOUND 的 post_id 组成的数组 |
+| posts_id    | array    | 相关 LOST & FOUND 组成的数组 |
 

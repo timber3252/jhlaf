@@ -218,16 +218,16 @@ fn handle_conn(mut ws: &mut tungstenite::WebSocket<std::net::TcpStream>) {
             match db::insert_item(&mut client, &userid.as_str().unwrap(), 
               &data::ItemData {
                 item_id: -1,
-                islost: parsed["item"]["lof"].as_bool().unwrap(),
+                islost: parsed["lof"].as_bool().unwrap(),
                 userid: String::from(userid.as_str().unwrap()),
                 item_type: String::from(parsed["item"]["type"].as_str().unwrap()),
                 item_name: String::from(parsed["item"]["name"].as_str().unwrap()),
                 image_url: String::from(parsed["item"]["image"].as_str().unwrap()),
                 desc: String::from(parsed["item"]["desc"].as_str().unwrap()),
-                pickup_time: parsed["item"]["pickup_time"].as_i64().unwrap(),
+                pickup_time: parsed["item"]["pickup_time"].as_str().unwrap().parse::<i64>().unwrap(),
                 place: String::from(parsed["item"]["place"].as_str().unwrap()),
                 contact: String::from(parsed["item"]["contact"].as_str().unwrap()),
-                post_time: parsed["item"]["post_time"].as_i64().unwrap(),
+                post_time: parsed["item"]["post_time"].as_str().unwrap().parse::<i64>().unwrap(),
               }) {
                 true => {
                   ws_send(&mut ws, String::from(r#"
@@ -259,7 +259,7 @@ fn handle_conn(mut ws: &mut tungstenite::WebSocket<std::net::TcpStream>) {
                 }"#));
               continue;
             }
-            match db::delete_item(&mut client, &userid.as_str().unwrap(), parsed["itemid"].as_i64().unwrap()) {
+            match db::delete_item(&mut client, &userid.as_str().unwrap(), parsed["itemid"].as_str().unwrap().parse::<i64>().unwrap()) {
               true => {
                 ws_send(&mut ws, String::from(r#"
                   {
@@ -279,9 +279,132 @@ fn handle_conn(mut ws: &mut tungstenite::WebSocket<std::net::TcpStream>) {
               }
             }
           } else if parsed["type"] == "select_all" {
+            let userid = &parsed["userid"];
+            if userid.is_null() || !userid.is_string() || !db::check_userid(&mut client, &userid.as_str().unwrap()) {
+              ws_send(&mut ws, String::from(r#"
+                {
+                  "type": "result",
+                  "result_type": "select_all",
+                  "stat": false,
+                  "err": "0701"
+                }"#));
+              continue;
+            }
+            let lof = parsed["lof"].as_bool().unwrap();
+            let item_type = &parsed["item_type"].as_str().unwrap();
+            let time_begin = parsed["time_begin"].as_str().unwrap().parse::<i64>().unwrap();  
+            let time_end = parsed["time_end"].as_str().unwrap().parse::<i64>().unwrap();
+            // lazy load 暂时没有实现
+            let mut raw_json = String::from(r#"
+              {
+                "type": "result",
+                "result_type": "select_all",
+                "stat": true,
+                "items": [
+            "#);
+            let mut cnt: i32 = 0;
+            if item_type != &String::from("all") {
+              for row in client.query("SELECT * FROM items WHERE lof = $1 and type = $2 and pickup_time >= $3 and pickup_time <= $4",
+                &[&lof, &item_type, &time_begin, &time_end]).unwrap() {
+                  cnt += 1;
+                  if cnt > 1 {
+                    raw_json += ",";
+                  }
+                  let (_itemid, _type, _name, _image, _desc, _pickup_time, _place, _contact, _post_time): (i64, String, String, String, String, i64, String, String, i64) = 
+                    (row.get(1), row.get(4), row.get(5), row.get(6), row.get(7), row.get(8), row.get(9), row.get(10), row.get(11));
+                  raw_json += &format!("{{
+                    \"itemid\": \"{}\",
+                    \"type\": \"{}\",
+                    \"name\": \"{}\",
+                    \"image\": \"{}\",
+                    \"desc\": \"{}\",
+                    \"pickup_time\": \"{}\",
+                    \"place\": \"{}\",
+                    \"contact\": \"{}\",
+                    \"post_time\": \"{}\"
+                  }}", _itemid, _type, _name, _image, _desc, _pickup_time, _place, _contact, _post_time);
+              }
+              raw_json += &format!("
+                  ],
+                  \"lof\": {}
+                }}", if lof { "true" } else { "false" });
+              ws_send(&mut ws, raw_json);
+            } else {
+              for row in client.query("SELECT * FROM items WHERE lof = $1 and pickup_time >= $2 and pickup_time <= $3",
+                &[&lof, &time_begin, &time_end]).unwrap() {
+                  cnt += 1;
+                  if cnt > 1 {
+                    raw_json += ",";
+                  }
+                  let (_itemid, _type, _name, _image, _desc, _pickup_time, _place, _contact, _post_time): (i64, String, String, String, String, i64, String, String, i64) = 
+                    (row.get(1), row.get(4), row.get(5), row.get(6), row.get(7), row.get(8), row.get(9), row.get(10), row.get(11));
+                  raw_json += &format!("{{
+                    \"itemid\": \"{}\",
+                    \"type\": \"{}\",
+                    \"name\": \"{}\",
+                    \"image\": \"{}\",
+                    \"desc\": \"{}\",
+                    \"pickup_time\": \"{}\",
+                    \"place\": \"{}\",
+                    \"contact\": \"{}\",
+                    \"post_time\": \"{}\"
+                  }}", _itemid, _type, _name, _image, _desc, _pickup_time, _place, _contact, _post_time);
+              }
+              raw_json += &format!("
+                  ],
+                  \"lof\": {}
+                }}", if lof { "true" } else { "false" });
+              ws_send(&mut ws, raw_json);
 
+            }
           } else if parsed["type"] == "select_me" {
-            
+            let userid = &parsed["userid"];
+            if userid.is_null() || !userid.is_string() || !db::check_userid(&mut client, &userid.as_str().unwrap()) {
+              ws_send(&mut ws, String::from(r#"
+                {
+                  "type": "result",
+                  "result_type": "select_me",
+                  "stat": false,
+                  "err": "0801"
+                }"#));
+              continue;
+            }
+            let lof = parsed["lof"].as_bool().unwrap();
+            // lazy load 暂时没有实现
+            let mut raw_json = String::from(r#"
+              {
+                "type": "result",
+                "result_type": "select_me",
+                "stat": true,
+                "items": [
+            "#);
+            let mut cnt: i32 = 0;
+            for row in client.query("SELECT * FROM items WHERE lof = $1 and userid = $2",
+              &[&lof, &userid.as_str().unwrap()]).unwrap() {
+                cnt += 1;
+                let (_itemid, _type, _name, _image, _desc, _pickup_time, _place, _contact, _post_time): (i64, String, String, String, String, i64, String, String, i64) = 
+                  (row.get(1), row.get(4), row.get(5), row.get(6), row.get(7), row.get(8), row.get(9), row.get(10), row.get(11));
+                if cnt > 1 {
+                  raw_json += ",";
+                }
+                raw_json += &format!("{{
+                  \"itemid\": \"{}\",
+                  \"type\": \"{}\",
+                  \"name\": \"{}\",
+                  \"image\": \"{}\",
+                  \"desc\": \"{}\",
+                  \"pickup_time\": \"{}\",
+                  \"place\": \"{}\",
+                  \"contact\": \"{}\",
+                  \"post_time\": \"{}\"
+                }}", _itemid, _type, _name, _image, _desc, _pickup_time, _place, _contact, _post_time);
+                if cnt >= 5 { break; }
+            }
+            raw_json += &format!("
+                ],
+                \"lof\": {}
+              }}", if lof { "true" } else { "false" });
+            ws_send(&mut ws, raw_json);
           } else if parsed["type"] == "close_session" {
             break;
           }
